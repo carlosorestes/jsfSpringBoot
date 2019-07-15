@@ -12,6 +12,7 @@ import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class DayOfWeekResolverAction {
 
 	private final DayOfWeekResolverForm dayOfWeekResolverForm;
 	private final DayOfWeekResolverService dayOfWeekResolverService;
-
+	
 	public DayOfWeekResolverAction(@Autowired DayOfWeekResolverForm dayOfWeekResolverForm,
 			@Autowired DayOfWeekResolverService dayOfWeekResolverService) {
 		this.dayOfWeekResolverForm = dayOfWeekResolverForm;
@@ -35,6 +36,8 @@ public class DayOfWeekResolverAction {
 		int month = dayOfWeekResolverForm.getMonth();
 		int dayOfMonth = dayOfWeekResolverForm.getDayOfMonth();
 		String teste = dayOfWeekResolverForm.getInput1();
+		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String txtProperty = request.getParameter("dayOfWeekResolverForm:input-test");
 		
 		System.out.println("Teste  ...........  "+ teste);
 
@@ -47,7 +50,7 @@ public class DayOfWeekResolverAction {
 		HtmlForm form = (HtmlForm) event.getComponent();
 
 		panel.getChildren().add(this.criaLabel("Usuário:", "lusuario", true, false));
-		panel.getChildren().add(this.criaInput("input1"));
+		panel.getChildren().add(this.criaInput("input-test"));
 
 		panel.setColumns(2);
 		List<UIComponent> children = form.getChildren();
@@ -78,8 +81,6 @@ public class DayOfWeekResolverAction {
 
 		// label.setId(nome);
 		input.setId(nome);
-//		input.setValueExpression(nome, createValueExpression("#{dayOfWeekResolverForm.input1}", String.class));
-		
 		return input;
 	}
 	
@@ -88,5 +89,7 @@ public class DayOfWeekResolverAction {
 	    return context.getApplication().getExpressionFactory()
 	        .createValueExpression(context.getELContext(), valueExpression, valueType);
 	}
+	
+	
 
 }
